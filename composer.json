@@ -1,0 +1,12 @@
+{
+	"name": "jacobbudin/playground",
+	"require": {
+		"php": ">=5.3.0",
+		"d11wtq/boris": "1.0.*",
+		"composer/composer": "1.0.*@dev"
+	}
+	"autoload": {
+        "psr-0": {"Playground": "src"}
+    },
+	"bin": ["bin/playground"]
+}
