@@ -10,8 +10,9 @@ class CLIOptionsHandler {
 	 * Accept the REPL object and perform any setup necessary from the CLI flags.
 	 *
 	 * @param Playground $playground
+	 * @param array $argv representation of $argv global
 	 */
-	public function handle($playground) {
+	public function handle($playground, $argv) {
 		$args = getopt('hv', array('help', 'version'));
 
 		foreach ($args as $option => $value) {
@@ -31,18 +32,15 @@ class CLIOptionsHandler {
 				case 'version':
 					$this->_handleVersion();
 				break;
-
-				default:
-					$this->_handleRequire($playground, array_slice($argv, 2));
-				break;
 			}
 		}
+
+		$this->_handleRequire($playground, array_slice($argv, 1));
 	}
 
 	// -- Private Methods
 
 	private function _handleRequire($playground, $names) {
-		var_dump($names);
 		/*
 		$require = array_reduce(
 			(array) $paths,

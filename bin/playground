@@ -6,6 +6,6 @@ require_once __DIR__.'/../src/autoload.php';
 $playground = new \Playground\Playground();
 
 $options = new \Playground\CLIOptionsHandler();
-$options->handle($playground);
+$options->handle($playground, $argv);
 
 $playground->start();
