@@ -4,14 +4,8 @@
 require_once __DIR__.'/../src/autoload.php';
 
 $playground = new \Playground\Playground();
-$boris  = new \Boris\Boris();
 
-/*
-$config = new \Boris\Config();
-$config->apply($boris);
+$options = new \Playground\CLIOptionsHandler();
+$options->handle($playground);
 
-$options = new \Boris\CLIOptionsHandler();
-$options->handle($boris);
-*/
-
-$boris->start();
+$playground->start();
