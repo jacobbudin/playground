@@ -35,28 +35,10 @@ class CLIOptionsHandler {
 			}
 		}
 
-		$this->_handleRequire($playground, array_slice($argv, 1));
+		$playground->setPackages(array_slice($argv, 1));
 	}
 
 	// -- Private Methods
-
-	private function _handleRequire($playground, $names) {
-		/*
-		$require = array_reduce(
-			(array) $paths,
-			function($acc, $v) { return array_merge($acc, explode(',', $v)); },
-			array()
-		);
-
-		$boris->onStart(function($worker, $scope) use($require) {
-			foreach($require as $path) {
-				require $path;
-			}
-
-			$worker->setLocal(get_defined_vars());
-		});
-		 */
-	}
 
 	private function _handleUsageInfo() {
 		echo <<<USAGE

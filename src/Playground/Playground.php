@@ -6,13 +6,11 @@ class Playground{
 	const VERSION = '1.0.0';
 
 	private $_packages = array();
-	private $_boris;
 
 	/**
 	 * Create a new Playground environment
 	 */
 	public function __construct(){
-		$this->_boris = new \Boris\Boris();
 	}
 
 	/**
@@ -31,6 +29,10 @@ class Playground{
 	 */
 
 	public function start() {
-		$this->_boris->start();
+		$packageManager = new \Playground\PackageManager($this->_packages);
+		$packageManager->retrieve();
+
+		$boris = new \Boris\Boris();
+		$boris->start();
 	}
 }
