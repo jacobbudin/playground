@@ -21,9 +21,17 @@ class PackageManager {
 		// Create phony IO
 		$io = new \Playground\IO\SimpleIO;
 		
-		// Build Composer, run installer
+		// Construct composer.json configuration
 		$composer_factory = new \Composer\Factory;
-		$composer = $composer_factory->createComposer($io, '/Users/jacobbudin/Desktop/composer.json', true);
+		$composer_file_contents = array('require' => array());
+		foreach($this->_packages as $package){
+			$composer_file_contents[$package] = '*';
+		}
+		$composer_file_path = '/Users/jacobbudin/Desktop/composer.json';
+		file_put_contents($composer_file_path, json_encode($composer_file_contents, JSON_FORCE_OBJECT));
+
+		// Build Composer, run installer
+		$composer = $composer_factory->createComposer($io, $composer_file_path, true);
 		
 		$this->_installer = new \Composer\Installer(
 			$io,

@@ -49,7 +49,7 @@ class SimpleIO extends \Composer\IO\BaseIO
      */
     public function write($messages, $newline = true)
     {
-		var_dump($messages);
+		// TODO: Log messages, write important ones
     }
 
     /**
