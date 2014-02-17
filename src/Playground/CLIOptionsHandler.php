@@ -35,7 +35,20 @@ class CLIOptionsHandler {
 			}
 		}
 
-		$playground->setPackages(array_slice($argv, 1));
+		// Format, set packages
+		$packages = array();
+		foreach(array_slice($argv, 1) as $package){
+			if(false !== ($i = strpos($package, ':'))){
+				$package_name = substr($package, 0, $i);
+				$package_version = substr($package, $i+1);
+			}
+			else{
+				$package_name = $package;
+				$package_version = '*';
+			}
+			$packages[$package_name] = $package_version;
+		}
+		$playground->setPackages($packages);
 	}
 
 	// -- Private Methods

@@ -39,7 +39,7 @@ class Playground{
 	 */
 
 	public function start() {
-		$packageManager = new \Playground\PackageManager($this->getPackages());
+		$packageManager = new \Playground\PackageManager($this);
 		$packageManager->retrieve();
 
 		$boris = new \Boris\Boris();

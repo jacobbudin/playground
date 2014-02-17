@@ -7,11 +7,11 @@ namespace Playground;
  */
 class PackageManager {
 	private $_autoloadFile;
-	private $_packages = array();
+	private $_playground;
 
-	public function __construct($packages){
+	public function __construct($playground){
 		date_default_timezone_set('UTC');
-		$this->_packages = $packages;
+		$this->_playground = $playground;
 	}
 
 	public function getAutoloadFile(){
@@ -33,7 +33,7 @@ class PackageManager {
 
 		$composer_factory = new \Composer\Factory;
 		$composer_file_contents = array(
-			'require' => array(),
+			'require' => $this->_playground->getPackages(),
 			'config' => array(
 				'vendor-dir' => $composer_vendor_path,
 			),
@@ -41,9 +41,6 @@ class PackageManager {
 
 		$this->_autoloadFile = $composer_vendor_path . DIRECTORY_SEPARATOR . 'autoload.php';
 
-		foreach($this->_packages as $package){
-			$composer_file_contents['require'][$package] = '*';
-		}
 		$composer_file_path = tempnam(sys_get_temp_dir(), 'playground');
 		if(false === $composer_file_path){
 			throw new \Exception('Cannot generate temporary composer.json file');
