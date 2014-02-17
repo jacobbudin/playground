@@ -14,6 +14,10 @@ class PackageManager {
 		$this->_packages = $packages;
 	}
 
+	public function getAutoloadFile(){
+		return $this->_autoloadFile;
+	}
+
 	/**
 	 * Download, update requested packages
 	 */
@@ -34,6 +38,9 @@ class PackageManager {
 				'vendor-dir' => $composer_vendor_path,
 			),
 		);
+
+		$this->_autoloadFile = $composer_vendor_path . DIRECTORY_SEPARATOR . 'autoload.php';
+
 		foreach($this->_packages as $package){
 			$composer_file_contents['require'][$package] = '*';
 		}

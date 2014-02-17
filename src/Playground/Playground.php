@@ -14,6 +14,16 @@ class Playground{
 	}
 
 	/**
+	 * Get Composer packages to be installed (if necessary) and referenced
+	 *
+	 * @return array $packages Composer-style paths
+	 */
+	public function getPackages() {
+		return $this->_packages;
+	}
+
+
+	/**
 	 * Set Composer packages to be installed (if necessary) and referenced
 	 *
 	 * @param array $packages Composer-style paths
@@ -29,10 +39,19 @@ class Playground{
 	 */
 
 	public function start() {
-		$packageManager = new \Playground\PackageManager($this->_packages);
+		$packageManager = new \Playground\PackageManager($this->getPackages());
 		$packageManager->retrieve();
 
 		$boris = new \Boris\Boris();
+
+		if($packageManager->getAutoloadFile()){
+			require_once($packageManager->getAutoloadFile());
+			$playground = $this;
+			$boris->onStart(function($worker, $scope) use ($playground) {
+				$worker->setLocal('playground', $playground);
+			});
+		}
+
 		$boris->start();
 	}
 }
