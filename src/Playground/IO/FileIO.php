@@ -2,8 +2,18 @@
 
 namespace Playground\IO;
 
-class SimpleIO extends \Composer\IO\BaseIO
+class FileIO extends \Composer\IO\BaseIO
 {
+	private $_logFile;
+
+	public function __construct($log_file){
+		$this->_logFile = $log_file;
+	}
+
+	public function __destruct(){
+		fclose($this->_logFile);
+	}
+
     /**
      * {@inheritDoc}
      */
@@ -49,7 +59,7 @@ class SimpleIO extends \Composer\IO\BaseIO
      */
     public function write($messages, $newline = true)
     {
-		// TODO: Log messages, write important ones
+		fwrite($this->_logFile, strip_tags($messages));
     }
 
     /**

@@ -44,8 +44,8 @@ class Playground{
 
 		$boris = new \Boris\Boris();
 
-		if($packageManager->getAutoloadFile()){
-			require_once($packageManager->getAutoloadFile());
+		if($autoload_file_path = $packageManager->getAutoloadFilePath()){
+			require_once($autoload_file_path);
 			$playground = $this;
 			$boris->onStart(function($worker, $scope) use ($playground) {
 				$worker->setLocal('playground', $playground);

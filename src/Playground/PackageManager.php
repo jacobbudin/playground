@@ -6,7 +6,8 @@ namespace Playground;
  * Downloads packages via Composer; injets them into Boris
  */
 class PackageManager {
-	private $_autoloadFile;
+	private $_autoloadFilePath;
+	private $_logFilePath;
 	private $_playground;
 
 	public function __construct($playground){
@@ -14,23 +15,33 @@ class PackageManager {
 		$this->_playground = $playground;
 	}
 
-	public function getAutoloadFile(){
-		return $this->_autoloadFile;
+	public function getAutoloadFilePath(){
+		return $this->_autoloadFilePath;
 	}
 
 	/**
 	 * Download, update requested packages
 	 */
 	public function retrieve() {
-		// Create phony IO
-		$io = new \Playground\IO\SimpleIO;
-		
 		// Construct composer.json configuration
 		$composer_vendor_path = tempnam(sys_get_temp_dir(), 'playground');
 		if(!(unlink($composer_vendor_path) && mkdir($composer_vendor_path))){
 			throw new \Exception('Cannot create temporary vendor directory');
 		}
 
+		// Create phony IO
+		$composer_log_path = tempnam(sys_get_temp_dir(), 'playground');
+		if(false === $composer_log_path){
+			throw new \Exception('Cannot generate temporary composer.log file');
+		}
+		$composer_log = fopen($composer_log_path, 'w');
+		if(false === $composer_log){
+			throw new \Exception('Cannot open temporary composer.log file');
+		}
+
+		$io = new \Playground\IO\FileIO($composer_log);
+
+		// Create Composer instance
 		$composer_factory = new \Composer\Factory;
 		$composer_file_contents = array(
 			'require' => $this->_playground->getPackages(),
@@ -39,7 +50,7 @@ class PackageManager {
 			),
 		);
 
-		$this->_autoloadFile = $composer_vendor_path . DIRECTORY_SEPARATOR . 'autoload.php';
+		$this->_autoloadFilePath = $composer_vendor_path . DIRECTORY_SEPARATOR . 'autoload.php';
 
 		$composer_file_path = tempnam(sys_get_temp_dir(), 'playground');
 		if(false === $composer_file_path){
