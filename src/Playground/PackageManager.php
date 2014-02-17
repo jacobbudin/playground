@@ -10,6 +10,7 @@ class PackageManager {
 	private $_packages = array();
 
 	public function __construct($packages){
+		date_default_timezone_set('UTC');
 		$this->_packages = $packages;
 	}
 
@@ -17,9 +18,11 @@ class PackageManager {
 	 * Download, update requested packages
 	 */
 	public function retrieve() {
-		$composer = new \Composer\Composer;
-		$composer_config = new \Composer\Config;
-		$composer->setConfig($composer_config);
+		// IO
+		$io = new \Playground\IO\SimpleIO;
+
+		$composer_factory = new \Composer\Factory;
+		$composer = $composer_factory->createComposer($io, '/Users/jacobbudin/Desktop/composer.json', true);
 
 		// Config
 		/*
@@ -29,15 +32,13 @@ class PackageManager {
 			$config->addRepository($package, '*');
 		}*/
 
-		// IO
-		$io = new \Composer\IO\NullIO;
-
 		// Root Package
 		/*
 		$rootPackage = new \Composer\Package\RootPackage('Playground', '1', '1.0');
 		$rootPackage->setRequires(array('monolog/monolog' => '1.0'));
 		$composer->setPackage($rootPackage);
 		 */
+		/*
 		$rootPackageLoader = new \Composer\Package\Loader\ArrayLoader;
 		$rootPackage = $rootPackageLoader->load(array(
 			'name' => '-',
@@ -47,22 +48,21 @@ class PackageManager {
 			),
 		), 'Composer\Package\RootPackage');
 		$composer->setPackage($rootPackage);
+		 */
 
 		// Download Manager
-		$downloadManager = new \Composer\Downloader\DownloadManager;
-		$downloadManager->setOutputProgress(false);
-		$downloadManager->setDownloader('git', new \Composer\Downloader\GitDownloader($io, $composer_config));
-        $downloadManager->setDownloader('svn', new \Composer\Downloader\SvnDownloader($io, $composer_config));
+		$downloadManager = $composer_factory->createDownloadManager($io, $composer->getConfig());
 		$composer->setDownloadManager($downloadManager);
 		
 		// Repository Manager
-		$repositoryManager = new \Composer\Repository\RepositoryManager($io, $composer_config);
+		$repositoryManager = new \Composer\Repository\RepositoryManager($io, $composer->getConfig());
 		$localRepositoryJson = new \Composer\Json\JsonFile('/Users/jacobbudin/Desktop/abc.json');
 		$localRepository = new \Composer\Repository\InstalledFilesystemRepository($localRepositoryJson);
 
 		$repositoryManager->setLocalRepository($localRepository);
+		$composer_config = $composer->getConfig();
 		foreach($composer_config::$defaultRepositories as $defR){
-			$repositoryManager->addRepository(new \Composer\Repository\ComposerRepository($defR, $io, $composer_config));
+			$repositoryManager->addRepository(new \Composer\Repository\ComposerRepository($defR, $io, $composer->getConfig()));
 		}
 		$composer->setRepositoryManager($repositoryManager);
 
@@ -97,8 +97,8 @@ class PackageManager {
 
 		$this->_installer = new \Composer\Installer(
 			$io,
-			$composer_config,
-			$rootPackage,
+			$composer->getConfig(),
+			$composer->getPackage(),
 			$downloadManager,
 			$repositoryManager,
 			$locker,
@@ -110,5 +110,4 @@ class PackageManager {
 		$this->_installer->run();
 	}
 }
-
 
