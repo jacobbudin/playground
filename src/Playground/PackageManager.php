@@ -3,7 +3,7 @@
 namespace Playground;
 
 /**
- * Processes available command line flags.
+ * Downloads packages via Composer; injets them into Boris
  */
 class PackageManager {
 	private $_autoloadFile;
@@ -22,13 +22,38 @@ class PackageManager {
 		$io = new \Playground\IO\SimpleIO;
 		
 		// Construct composer.json configuration
-		$composer_factory = new \Composer\Factory;
-		$composer_file_contents = array('require' => array());
-		foreach($this->_packages as $package){
-			$composer_file_contents[$package] = '*';
+		$composer_vendor_path = tempnam(sys_get_temp_dir(), 'playground');
+		if(!(unlink($composer_vendor_path) && mkdir($composer_vendor_path))){
+			throw new \Exception('Cannot create temporary vendor directory');
 		}
-		$composer_file_path = '/Users/jacobbudin/Desktop/composer.json';
-		file_put_contents($composer_file_path, json_encode($composer_file_contents, JSON_FORCE_OBJECT));
+
+		$composer_factory = new \Composer\Factory;
+		$composer_file_contents = array(
+			'require' => array(),
+			'config' => array(
+				'vendor-dir' => $composer_vendor_path,
+			),
+		);
+		foreach($this->_packages as $package){
+			$composer_file_contents['require'][$package] = '*';
+		}
+		$composer_file_path = tempnam(sys_get_temp_dir(), 'playground');
+		if(false === $composer_file_path){
+			throw new \Exception('Cannot generate temporary composer.json file');
+		}
+		$composer_file = fopen($composer_file_path, 'w');
+		if(false === $composer_file){
+			throw new \Exception('Cannot open temporary composer.json file');
+		}
+		$composer_file_contents_json = json_encode($composer_file_contents, JSON_FORCE_OBJECT);
+		if(false === $composer_file_contents_json){
+			throw new \Exception('Cannot generate JSON from package list');
+		}
+		$composer_file_bytes_written = fwrite($composer_file, $composer_file_contents_json);
+		if(false === $composer_file_bytes_written){
+			throw new \Exception('Cannot write JSON from package list');
+		}
+		fclose($composer_file);
 
 		// Build Composer, run installer
 		$composer = $composer_factory->createComposer($io, $composer_file_path, true);
