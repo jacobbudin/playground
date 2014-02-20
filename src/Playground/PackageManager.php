@@ -7,6 +7,8 @@ namespace Playground;
  */
 class PackageManager {
 	private $_autoloadFilePath;
+	private $_composerFilePath;
+	private $_composerLockFilePath;
 	private $_logFilePath;
 	private $_playground;
 
@@ -17,6 +19,14 @@ class PackageManager {
 
 	public function getAutoloadFilePath(){
 		return $this->_autoloadFilePath;
+	}
+
+	public function getComposerFilePath(){
+		return $this->_composerFilePath;
+	}
+
+	public function getComposerLockFilePath(){
+		return $this->_composerLockFilePath;
 	}
 
 	/**
@@ -52,7 +62,9 @@ class PackageManager {
 
 		$this->_autoloadFilePath = $composer_vendor_path . DIRECTORY_SEPARATOR . 'autoload.php';
 
-		$composer_file_path = tempnam(sys_get_temp_dir(), 'playground');
+		$this->_composerFilePath = $composer_file_path = tempnam(sys_get_temp_dir(), 'playground');
+		$this->_composerLockFilePath = $composer_file_path . '.lock';
+
 		if(false === $composer_file_path){
 			throw new \Exception('Cannot generate temporary composer.json file');
 		}
