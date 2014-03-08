@@ -1,0 +1,18 @@
+{
+	"alias": "playground.phar",
+    "files": [],
+	"chmod": "0755",
+	"directories": ["src"],
+	"finder": [
+        {
+            "name": ["*.php", "*.json"],
+            "exclude": [
+                "kherge"
+            ],
+            "in": "vendor"
+        }
+    ],
+    "main": "bin/playground",
+    "output": "playground.phar",
+    "stub": true
+}
