@@ -103,5 +103,20 @@ class PackageManager {
 
 		$this->_installer->run();
 	}
+
+	public function cleanup(){
+		$tmp_file_paths = array(
+			$this->_autoloadFilePath,
+			$this->_composerFilePath,
+			$this->_logFilePath,
+			$this->_composerLockFilePath,
+		);
+
+		foreach($tmp_file_paths as $tmp_file_path){
+			if($tmp_file_path !== null){
+				@unlink($tmp_file_path);
+			}
+		}
+	}
 }
 
