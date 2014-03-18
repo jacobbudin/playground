@@ -20,4 +20,4 @@ before_script:
     - git config --global user.email travis@example.com
 
 script:
-    - ls -d tests/Composer/Test/* | parallel --gnu --keep-order 'echo "Running {} tests"; ./vendor/bin/phpunit -c phpunit.xml.dist {};' || exit 1
+    - ls -d tests/Playground/Test/* | parallel --gnu --keep-order 'echo "Running {} tests"; ./vendor/bin/phpunit -c phpunit.xml.dist {};' || exit 1
