@@ -6,7 +6,7 @@ Playground is a command line tool for evaluating PHP packages from [Packagist](h
 
 Let's say you're looking for a better way to evaluate datetimes in your latest Web app, and you want to try, say, the [jasonlewis/expressive-date](https://packagist.org/packages/jasonlewis/expressive-date) package. You could add the package to your `composer.json` and fiddle with Expressive Date inside your MVC framework of choice, but that's a time-consuming task just to evalute a package. And there's a risk you accidentally commit the package to your Composer configuration, or, even worse, you accidentally leave a few package-dependent lines in your application logic.
 
-Couldn't it be easier? Playground leverages the power of Composer package management with the easy-of-use of the Boris REPL. Playground lets you download packages, autoload the package's classes, and launch a REPL in one line. If you decides to use the package(s), Playground can even generate a starter `composer.json` file for you.`
+Couldn't it be easier? Playground leverages the power of Composer package management with the easy-of-use of the Boris REPL. Playground lets you download packages, autoload the package's classes, and launch a REPL in one line. If you decides to use the package(s), Playground can even generate a starter `composer.json` file for you.
 
 ## Installation
 
