@@ -25,6 +25,10 @@ class PackageManager {
 		return $this->_composerFilePath;
 	}
 
+	public function getComposerLogFilePath(){
+		return $this->_logFilePath;
+	}
+
 	public function getComposerLockFilePath(){
 		return $this->_composerLockFilePath;
 	}
@@ -40,7 +44,7 @@ class PackageManager {
 		}
 
 		// Create phony IO
-		$composer_log_path = tempnam(sys_get_temp_dir(), 'playground');
+		$this->_logFilePath = $composer_log_path = tempnam(sys_get_temp_dir(), 'playground');
 		if(false === $composer_log_path){
 			throw new \Exception('Cannot generate temporary composer.log file');
 		}
