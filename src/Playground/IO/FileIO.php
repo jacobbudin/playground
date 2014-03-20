@@ -2,14 +2,26 @@
 
 namespace Playground\IO;
 
+/**
+ * FileIO is a \Composer\IO-compatible class for non-interactive file logging
+ */
 class FileIO extends \Composer\IO\BaseIO
 {
+	/**
+	 * @var Log file resource
+	 */
 	private $_logFile;
 
+	/**
+	 * Initiate log file resource
+	 */
 	public function __construct($log_file){
 		$this->_logFile = $log_file;
 	}
 
+	/*
+	 * Close log file resource
+	 */
 	public function __destruct(){
 		fclose($this->_logFile);
 	}

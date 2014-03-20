@@ -2,22 +2,39 @@
 
 namespace Playground;
 
+/**
+ * Playground is the primary class
+ *
+ * Creates the Playground environment, stores packages, launches the REPL
+ */
 class Playground{
+	/**
+	 * Playground version
+	 */
 	const VERSION = '1.0.0';
 
+	/**
+	 * @var array Packagist depedencies and versions
+	 */
 	private $_packages = array();
+
+	/**
+	 * @var \Playground\PackageManager
+	 */
 	private $_packageManager;
 
 	/**
 	 * Create a new Playground environment
+	 *
+	 * @return void
 	 */
-	public function __construct(){
+	public function __construct() {
 	}
 
 	/**
 	 * Get Composer packages to be installed (if necessary) and referenced
 	 *
-	 * @return array $packages Composer-style paths
+	 * @return array $packages Packagist depedencies and versions
 	 */
 	public function getPackages() {
 		return $this->_packages;
@@ -27,7 +44,7 @@ class Playground{
 	/**
 	 * Set Composer packages to be installed (if necessary) and referenced
 	 *
-	 * @param array $packages Composer-style paths
+	 * @param array $packages Packagist depedencies and versions
 	 */
 	public function setPackages($packages) {
 		$this->_packages = $packages;
@@ -61,6 +78,7 @@ class Playground{
 	 * Save composer.json and composer.lock files
 	 *
 	 * @param string $file_path Relative or absolute file path with or without .json extension
+	 * @returns bool If saved Composer files
 	 */
 	public function saveComposer($composer_file_path) {
 		$composer_ext = '.json';

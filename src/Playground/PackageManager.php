@@ -3,32 +3,78 @@
 namespace Playground;
 
 /**
- * Downloads packages via Composer; injets them into Boris
+ * Downloads packages via Composer using associate arrays
  */
 class PackageManager {
+
+	/**
+	 * @var string Composer autoload file path
+	 */
 	private $_autoloadFilePath;
+
+	/**
+	 * @var string Composer (composer.json) file path
+	 */
 	private $_composerFilePath;
+
+	/**
+	 * @var string Composer (composer.lock) lock file path
+	 */
 	private $_composerLockFilePath;
+
+	/**
+	 * @var string Composer log file path
+	 */
 	private $_logFilePath;
+
+	/**
+	 * @var \Playground\Playground A Playground instance
+	 */
 	private $_playground;
 
+	/**
+	 * Construct PackageManager instance
+	 * 
+	 * @param \Playground\Playground The active Playground instance
+	 * @todo See whether date_default_timezone_set() is necessary
+	 */
 	public function __construct($playground){
 		date_default_timezone_set('UTC');
 		$this->_playground = $playground;
 	}
 
+	/**
+	 * Gets Composer autoload file path
+	 *
+	 * @return string
+	 */
 	public function getAutoloadFilePath(){
 		return $this->_autoloadFilePath;
 	}
 
+	/**
+	 * Gets Composer (composer.json) file path
+	 *
+	 * @return string
+	 */
 	public function getComposerFilePath(){
 		return $this->_composerFilePath;
 	}
 
+	/**
+	 * Gets Composer log file path
+	 *
+	 * @return string
+	 */
 	public function getComposerLogFilePath(){
 		return $this->_logFilePath;
 	}
 
+	/**
+	 * Gets Composer (composr.lock) lock file path
+	 *
+	 * @return string
+	 */
 	public function getComposerLockFilePath(){
 		return $this->_composerLockFilePath;
 	}
@@ -104,6 +150,9 @@ class PackageManager {
 		$this->_installer->run();
 	}
 
+	/**
+	 * Delete temporary Composer files generated during retrieve()
+	 */
 	public function cleanup(){
 		$tmp_file_paths = array(
 			$this->_autoloadFilePath,
